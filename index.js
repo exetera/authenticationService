@@ -6,11 +6,11 @@ module.exports = function(connectionString){
 		connectionString = "";
 	}
 	
-	var db = mongojs(connectionString, [collections]);
+	// var db = mongojs(connectionString, [collections]);
 	var auth = {};
 
 	auth.addUser = function(){
-		
+	    return true;
 	}
 
 	auth.verifyUser = function(){
