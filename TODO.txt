@@ -1,0 +1,19 @@
+TODO
+----
+
+creazione repository git
+scaffolding
+cercare dipendenze
+        driver database: mongojs
+        database: mongo
+        validazione: joi
+        cifratura:bkfd2-password
+        test: tape
+        
+
+api
+        add_user
+        auth_user
+        status_user
+        upd_user
+
