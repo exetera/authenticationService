@@ -1,7 +1,7 @@
 var auth = require('./')();
 
 var user = {
-	username: "",
+	username: "exetera",
 	password: "pippo"
 }
 

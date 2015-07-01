@@ -50,6 +50,10 @@ module.exports = function (connectionString){
         });
 
 
+    },
+    
+    auth.close = function(){
+    	db.close();
     }
 
     return auth;
