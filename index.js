@@ -52,19 +52,21 @@ module.exports = function (connectionString){
 		hasher(opts, function(err, pass, salt, hash) {
 		    user.salt = salt;
 		    user.hash = hash;
+		    
 		    var userDB={
-			username: user.username,
-			salt:user.salt,
-			hash:user.hash
+				username: user.username,
+				salt:user.salt,
+				hash:user.hash
 		    };
-	            console.log(userDB.username);
-	            db.users.findOne({
-	                username:userDB.username
-	            }, function(err, doc) {
-	                if (err) return cb(err);
-	                console.log("#####" + doc);
-	                cb(null, doc);
-	            });
+	        
+            db.users.findOne({
+                username:userDB.username
+            }, function(err, doc) {
+                if (err){
+                	return cb(err);
+                }
+                cb(null, doc);
+            });
 		});
 
 	};
