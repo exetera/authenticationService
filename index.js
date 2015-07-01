@@ -22,33 +22,39 @@ module.exports = function (connectionString){
         if (result.error != null) {
             return cb(result.error);
         } 
-
 	var opts = {
 	    password: user.password
 	};
-
 	hasher(opts, function(err, pass, salt, hash) {
 	    user.salt = salt;
 	    user.hash = hash;
-
 	    var userDB={
 		username: user.username,
 		salt:user.salt,
 		hash:user.hash
-	    }
-
+	    };
 	    db.users.save(userDB, function(err,savedObj){
 		if (err) return cb(err);
 		cb(null, savedObj._id.toString());
 	    });
-	    auth.verify = function(){
-		
-	    }
-	    auth.get = function(){
-		
-	    }
-	    return auth;
-        }
+	});			
+    },
+    auth.verify = function(){	
+
+    },
+    auth.get = function(user, cb){	
+        db.mycollection.findOne({
+            _id:mongojs.ObjectId('523209c4561c640000000001')
+        }, function(err, doc) {
+            // doc._id.toString() === '523209c4561c640000000001' 
+        });
+
+
+    }
+
+    return auth;
+
+}
 
 
 
