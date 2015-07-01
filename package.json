@@ -21,5 +21,16 @@
   "bugs": {
     "url": "https://github.com/exetera/authenticationService/issues"
   },
-  "homepage": "https://github.com/exetera/authenticationService#readme"
+  "homepage": "https://github.com/exetera/authenticationService#readme",
+  "dependencies": {
+    "debug": "^2.2.0",
+    "joi": "^6.5.0",
+    "mongojs": "^1.0.2",
+    "pbkdf2-password": "^1.1.0"
+  },
+  "devDependencies": {
+    "pre-commit": "^1.0.10",
+    "standard": "^4.5.1",
+    "tape": "^4.0.0"
+  }
 }
