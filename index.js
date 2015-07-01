@@ -6,7 +6,7 @@ var hasher = require('pbkdf2-password')();
 
 module.exports = function (connectionString){
     if (connectionString==undefined) {
-	connectionString = "mongodb://localhost/building";
+		connectionString = "mongodb://localhost/building";
     }
     
     console.log("connection mongo...");
@@ -22,40 +22,57 @@ module.exports = function (connectionString){
         if (result.error != null) {
             return cb(result.error);
         } 
-	var opts = {
-	    password: user.password
-	};
-	hasher(opts, function(err, pass, salt, hash) {
-	    user.salt = salt;
-	    user.hash = hash;
-	    var userDB={
-		username: user.username,
-		salt:user.salt,
-		hash:user.hash
-	    };
-	    db.users.save(userDB, function(err,savedObj){
-		if (err) return cb(err);
-		cb(null, savedObj._id.toString());
-	    });
-	});			
-    },
+		var opts = {
+		    password: user.password
+		};
+		hasher(opts, function(err, pass, salt, hash) {
+		    user.salt = salt;
+		    user.hash = hash;
+		    var userDB={
+			username: user.username,
+			salt:user.salt,
+			hash:user.hash
+		    };
+		    db.users.save(userDB, function(err,savedObj){
+			if (err) return cb(err);
+			cb(null, savedObj._id.toString());
+		    });
+		});			
+    };
+
     auth.verify = function(){	
 
-    },
-    auth.get = function(user, cb){	
-        db.mycollection.findOne({
-            _id:mongojs.ObjectId('523209c4561c640000000001')
-        }, function(err, doc) {
-            // doc._id.toString() === '523209c4561c640000000001' 
-        });
+    };
 
+    auth.get = function(user, cb){
+		var opts = {
+		    password: user.password
+		};
 
-    },
+		hasher(opts, function(err, pass, salt, hash) {
+		    user.salt = salt;
+		    user.hash = hash;
+		    var userDB={
+			username: user.username,
+			salt:user.salt,
+			hash:user.hash
+		    };
+	            console.log(userDB.username);
+	            db.users.findOne({
+	                username:userDB.username
+	            }, function(err, doc) {
+	                if (err) return cb(err);
+	                console.log("#####" + doc);
+	                cb(null, doc);
+	            });
+		});
+
+	};
     
     auth.close = function(){
     	db.close();
-    }
-
+    };
+	
     return auth;
 
 }
