@@ -1,6 +1,6 @@
 {
   "name": "@piemme/authentication-service",
-  "version": "0.0.1",
+  "version": "1.0.1",
   "description": "auth service for assets building",
   "main": "index.js",
   "directories": {
