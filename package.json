@@ -24,6 +24,7 @@
   "homepage": "https://github.com/exetera/authenticationService#readme",
   "dependencies": {
     "debug": "^2.2.0",
+    "docker-namesgenerator": "0.0.1",
     "joi": "^6.5.0",
     "mongojs": "^1.0.2",
     "pbkdf2-password": "^1.1.0"
