@@ -6,7 +6,7 @@ var hasher = require('pbkdf2-password')();
 
 module.exports = function (connectionString){
     if (connectionString==undefined) {
-		connectionString = "mongodb://localhost/building";
+	connectionString = "mongodb://localhost/building";
     }
     
     console.log("connection mongo...");
@@ -22,22 +22,22 @@ module.exports = function (connectionString){
         if (result.error != null) {
             return cb(result.error);
         } 
-		var opts = {
-		    password: user.password
-		};
-		hasher(opts, function(err, pass, salt, hash) {
-		    user.salt = salt;
-		    user.hash = hash;
-		    var userDB={
-			username: user.username,
-			salt:user.salt,
-			hash:user.hash
-		    };
-		    db.users.save(userDB, function(err,savedObj){
-			if (err) return cb(err);
-			cb(null, savedObj._id.toString());
-		    });
-		});			
+	var opts = {
+	    password: user.password
+	};
+	hasher(opts, function(err, pass, salt, hash) {
+	    user.salt = salt;
+	    user.hash = hash;
+	    var userDB={
+		username: user.username,
+		salt:user.salt,
+		hash:user.hash
+	    };
+	    db.users.save(userDB, function(err,savedObj){
+		if (err) return cb(err);
+		cb(null, savedObj._id.toString());
+	    });
+	});			
     };
 
     // auth.verify = function(){	
@@ -45,36 +45,54 @@ module.exports = function (connectionString){
     // };
 
     auth.get = function(user, cb){
-		var opts = {
-		    password: user.password
-		};
+        db.users.findOne({
+            username:user.username
+        }, function(err, user_found) {
+            if (err) return cb(err);
+            if (user_found == null) return cb('User not found!');
+            var opts = {
+                salt: user_found.salt,
+                password: user.password
+            };
+            hasher(opts, function(err, pass, salt, hash) {
+                // opts.salt = salt;
+                // console.log(hash);
+                user_found.hash = hash;
+                db.users.findOne(
+                    user_found
+                , function(err, user_checked) {
+                    if (err) return cb(err);
+                    // console.log(user_checked);
+                    cb(null, user_checked);
+                });
 
-		hasher(opts, function(err, pass, salt, hash) {
-		    user.salt = salt;
-		    user.hash = hash;
-		    
-		    var userDB={
-				username: user.username,
-				salt:user.salt,
-				hash:user.hash
-		    };
-	        
-            db.users.findOne({
-                username:userDB.username
-            }, function(err, doc) {
-                if (err){
-                	return cb(err);
-                }
-                cb(null, doc);
+                /**
+                hasher(opts, function(err, pass, salt, hash2) {
+                    // assert.deepEqual(hash2, hash);
+                    // console.log(hash2);
+                    // password mismatch
+                    opts.password = "aaa";
+                    hasher(opts, function(err, pass, salt, hash2) {
+                        // assert.notDeepEqual(hash2, hash);
+                        console.log("OK");
+                    });
+                });
+                **/
+
             });
-		});
 
-	};
+
+
+
+
+        });
+
+    };
     
     auth.close = function(){
     	db.close();
     };
-	
+    
     return auth;
 
 }

@@ -52,14 +52,28 @@ test('test get user', function (t) {
 		username: "exetera2",
 		password: "pippo"
     };
-
     auth.put(user, function(err, data){
         auth.get(user, function(err, data){
-            t.equal(data.username, 'exetera2');
-            auth.close();
+            t.equal(data.username, user.username);
+            // auth.close();
             t.end();
         });
     });
 });
 
+
+test('test get user not exists', function (t) {
+    var user_not_exists = {
+	username: "blalb",
+	password: "alalal"
+    };
+    auth.get(user_not_exists, function(err, data){
+        console.log(err);
+        t.ok(err, 'error');
+        auth.close();
+        t.end();
+    });
+
+
+});
 
