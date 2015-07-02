@@ -15,7 +15,7 @@ test('test add user', function (t) {
 	});
 });
 
-test('validation username empty', function (t) {
+test('put with username empty', function (t) {
  
 	var user = {
 		username: "",
@@ -31,7 +31,7 @@ test('validation username empty', function (t) {
 
 });
 
-test('validation password empty', function (t) {
+test('put with password empty', function (t) {
  
 	var user = {
 		username: "pippo",
@@ -53,7 +53,7 @@ test('test get user', function (t) {
 		password: "pippo"
     };
     auth.put(user, function(err, data){
-        auth.get(user, function(err, data){
+        auth.get(user.username, function(err, data){
             t.equal(data.username, user.username);
             // auth.close();
             t.end();
@@ -67,7 +67,7 @@ test('test get user not exists', function (t) {
 	username: "blalb",
 	password: "alalal"
     };
-    auth.get(user_not_exists, function(err, data){
+    auth.get(user_not_exists.username, function(err, data){
         console.log(err);
         t.ok(err, 'error');
         auth.close();

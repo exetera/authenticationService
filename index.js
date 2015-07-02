@@ -21,30 +21,37 @@ module.exports = function (connectionString){
         var result = joi.validate(user, schema);
         if (result.error != null) {
             return cb(result.error);
-        } 
-	var opts = {
-	    password: user.password
-	};
-	hasher(opts, function(err, pass, salt, hash) {
-	    user.salt = salt;
-	    user.hash = hash;
-	    var userDB={
-		username: user.username,
-		salt:user.salt,
-		hash:user.hash
-	    };
-	    db.users.save(userDB, function(err,savedObj){
-		if (err) return cb(err);
-		cb(null, savedObj._id.toString());
-	    });
-	});			
+        }
+		var opts = {
+		    password: user.password
+		};
+		hasher(opts, function(err, pass, salt, hash) {
+		    user.salt = salt;
+		    user.hash = hash;
+		    var userDB={
+			username: user.username,
+			salt:user.salt,
+			hash:user.hash
+		    };
+		    db.users.save(userDB, function(err,savedObj){
+			if (err) return cb(err);
+			cb(null, savedObj._id.toString());
+		    });
+		});			
     };
 
-    // auth.verify = function(){	
+    auth.get = function(username, cb){	
+    	db.users.findOne({
+            username:username
+        }, function(err, user_found) {
+            if (err) return cb(err);
+            if (user_found == null) return cb('User not found!');
+            cb(null,user_found);
+            
+    	});
+    }
 
-    // };
-
-    auth.get = function(user, cb){
+    auth.login = function(user, cb){
         db.users.findOne({
             username:user.username
         }, function(err, user_found) {
@@ -80,11 +87,6 @@ module.exports = function (connectionString){
                 **/
 
             });
-
-
-
-
-
         });
 
     };
