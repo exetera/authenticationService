@@ -40,9 +40,9 @@ module.exports = function (connectionString){
 		});			
     };
 
-    auth.verify = function(){	
+    // auth.verify = function(){	
 
-    };
+    // };
 
     auth.get = function(user, cb){
 		var opts = {
